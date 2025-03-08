@@ -19,7 +19,7 @@ clean:
 fclean: clean
 	rm -f $(EXEC)
 
-test_run: $(EXEC)
+tests_run: $(EXEC)
 	./$(EXEC)
 
 .PHONY: all clean fclean test_run
