@@ -1,85 +1,28 @@
-# Compiler and flags
+# Makefile for C project
+
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-SRC = main.c
-OBJ = $(SRC:.c=.o)
-EXEC = my_program
+CFLAGS = -Wall -g
 
-# Default target to compile the program
-all: $(EXEC)
+# Targets for building the executables
+SUCCESS_EXEC = test_success
+FAIL_EXEC = test_fail
 
-# Rule to compile the program
-$(EXEC): $(OBJ)
-	$(CC) $(OBJ) -o $(EXEC)
+all: $(SUCCESS_EXEC) $(FAIL_EXEC)
 
-# Rule to create object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(SUCCESS_EXEC): test_success.c
+	$(CC) $(CFLAGS) -o $(SUCCESS_EXEC) test_success.c
 
-# Rule for cleaning up object files
+$(FAIL_EXEC): test_fail.c
+	$(CC) $(CFLAGS) -o $(FAIL_EXEC) test_fail.c
+
+# Clean the build
 clean:
-	rm -f $(OBJ)
+	rm -f $(SUCCESS_EXEC) $(FAIL_EXEC)
 
-# Rule for fully cleaning (removes executable and object files)
+# Remove everything, including object files if they existed
 fclean: clean
-	rm -f $(EXEC)
 
-# Rule to compile and run the program for testing
-test_run: $(EXEC)
-	@echo "Running test cases..."
-
-	# Test Case 1: 5 + 3
-	./$(EXEC) 5 + 3 > result.txt
-	@echo "Expected Output: Result: 5 + 3 = 8"
-	@echo "Actual Output:"
-	cat result.txt
-	@echo "Testing 5 + 3..."
-	@if ! grep -q "Result: 5 + 3 = 8" result.txt; then \
-		echo "Test Failed!"; \
-		exit 1; \
-	else \
-		echo "Test Passed!"; \
-	fi
-
-	# Test Case 2: 10 / 2
-	./$(EXEC) 10 / 2 > result.txt
-	@echo "Expected Output: Result: 10 / 2 = 5"
-	@echo "Actual Output:"
-	cat result.txt
-	@echo "Testing 10 / 2..."
-	@if ! grep -q "Result: 10 / 2 = 5" result.txt; then \
-		echo "Test Failed!"; \
-		exit 1; \
-	else \
-		echo "Test Passed!"; \
-	fi
-
-	# Test Case 3: Division by Zero
-	./$(EXEC) 10 / 0 > result.txt
-	@echo "Expected Output: Error: Division by zero!"
-	@echo "Actual Output:"
-	cat result.txt
-	@echo "Testing Division by Zero..."
-	@if ! grep -q "Error: Division by zero!" result.txt; then \
-		echo "Test Failed!"; \
-		exit 1; \
-	else \
-		echo "Test Passed!"; \
-	fi
-
-	# Test Case 4: Invalid Operator
-	./$(EXEC) 10 ^ 2 > result.txt
-	@echo "Expected Output: Unknown operator: ^"
-	@echo "Actual Output:"
-	cat result.txt
-	@echo "Testing Invalid Operator..."
-	@if ! grep -q "Unknown operator: ^" result.txt; then \
-		echo "Test Failed!"; \
-		exit 1; \
-	else \
-		echo "Test Passed!"; \
-	fi
-
-	@echo "All tests completed."
-
-.PHONY: all clean fclean test_run
+# Run tests
+tests_run:
+	./$(SUCCESS_EXEC) && echo "Success Test Passed" || exit 1
+	./$(FAIL_EXEC) && echo "Fail Test Passed" || exit 1
