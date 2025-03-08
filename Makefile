@@ -1,29 +1,27 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-LDFLAGS = -lcriterion
-
+NAME = myprogram
 SRC = main.c
 OBJ = $(SRC:.c=.o)
-NAME = my_program
-TEST_SRC = tests.c main.c
-TEST_OBJ = $(TEST_SRC:.c=.o)
+TEST_SRC = tests/test_main.c
 TEST_NAME = unit_tests
 
-all: $(NAME)
+all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	$(CC)	-o	$(NAME)	$(OBJ)
 
-tests_run:	$(TEST_OBJ)
-	$(CC)	-o	$(TEST_NAME)	$(TEST_OBJ)	$(LDFLAGS)
-	./$(TEST_NAME)
-
 clean:
-	rm	-f	$(OBJ)	$(TEST_OBJ)
+	rm	-f	$(OBJ)
+	rm	-f	$(TEST_NAME)
 
 fclean:	clean
-	rm	-f	$(NAME)	$(TEST_NAME)
+	rm	-f	$(NAME)
 
 re:	fclean	all
 
-.PHONY:	all	tests_run	clean	fclean	re
+tests_run:
+	$(CC)	$(TEST_SRC)	-o	$(TEST_NAME)	-lcriterion
+	./$(TEST_NAME)
+
+.PHONY:	all	clean	fclean	re	tests_run
