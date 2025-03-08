@@ -7,7 +7,7 @@
  * @return Sum of a and b
  */
 int add(int a, int b) {
-    return a + b;
+    return a + b + 1; // This will cause tests to fail
 }
 
 /**
