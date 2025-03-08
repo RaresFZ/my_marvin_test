@@ -1,28 +1,29 @@
-# Makefile for C project
-
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -lcriterion
 
-# Targets for building the executables
-SUCCESS_EXEC = test_success
-FAIL_EXEC = test_fail
+SRC = main.c
+OBJ = $(SRC:.c=.o)
+NAME = my_program
+TEST_SRC = tests.c main.c
+TEST_OBJ = $(TEST_SRC:.c=.o)
+TEST_NAME = unit_tests
 
-all: $(SUCCESS_EXEC) $(FAIL_EXEC)
+all: $(NAME)
 
-$(SUCCESS_EXEC): test_success.c
-	$(CC) $(CFLAGS) -o $(SUCCESS_EXEC) test_success.c
+$(NAME):	$(OBJ)
+	$(CC)	-o	$(NAME)	$(OBJ)
 
-$(FAIL_EXEC): test_fail.c
-	$(CC) $(CFLAGS) -o $(FAIL_EXEC) test_fail.c
+tests_run:	$(TEST_OBJ)
+	$(CC)	-o	$(TEST_NAME)	$(TEST_OBJ)	$(LDFLAGS)
+	./$(TEST_NAME)
 
-# Clean the build
 clean:
-	rm -f $(SUCCESS_EXEC) $(FAIL_EXEC)
+	rm	-f	$(OBJ)	$(TEST_OBJ)
 
-# Remove everything, including object files if they existed
-fclean: clean
+fclean:	clean
+	rm	-f	$(NAME)	$(TEST_NAME)
 
-# Run tests
-tests_run:
-	./$(SUCCESS_EXEC) && echo "Success Test Passed" || exit 1
-	./$(FAIL_EXEC) && echo "Fail Test Passed" || exit 1
+re:	fclean	all
+
+.PHONY:	all	tests_run	clean	fclean	re
