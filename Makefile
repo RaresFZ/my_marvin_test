@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-
 SRC = main.c
 OBJ = $(SRC:.c=.o)
 EXEC = my_program
@@ -19,7 +18,17 @@ clean:
 fclean: clean
 	rm -f $(EXEC)
 
-tests_run: $(EXEC)
-	./$(EXEC)
+test_run: $(EXEC)
+	./$(EXEC) 5 + 3 > result.txt
+	cat result.txt
+	grep -q "Result: 5 + 3 = 8" result.txt && echo "Test Passed!" || echo "Test Failed!"
+
+	./$(EXEC) 10 / 2 >> result.txt
+	cat result.txt
+	grep -q "Result: 10 / 2 = 5" result.txt && echo "Test Passed!" || echo "Test Failed!"
+
+	./$(EXEC) 10 / 0 >> result.txt
+	cat result.txt
+	grep -q "Error: Division by zero!" result.txt && echo "Test Passed!" || echo "Test Failed!"
 
 .PHONY: all clean fclean test_run
