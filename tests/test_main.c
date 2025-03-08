@@ -2,7 +2,7 @@
 
 
 Test(basic_test, passing_test) {
-    cr_assert(1 == 1, "This test should pass");
+    cr_assert(1 == 1, "This test should passs");
 }
 
 // Uncomment this test to simulate a failing build
