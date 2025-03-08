@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main() {
-    printf("This test should succeed!\n");
-    return 0;  // Success exit code
+    printf("This test should fail!\n");
+    return 1;  // Failure exit code
 }
